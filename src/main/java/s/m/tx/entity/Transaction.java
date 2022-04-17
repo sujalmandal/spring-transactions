@@ -6,17 +6,19 @@ import s.m.tx.entity.base.AuditableEntity;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name  = "transaction")
 @Getter
 @Setter
+@Entity
+@Table(name  = "transaction")
 public class Transaction extends AuditableEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name="json_data")
-    private String jsonData;
+    @OneToOne(mappedBy = "transaction")
+    private TransactionData data;
+
+    private Boolean isActive = Boolean.TRUE;
 
     public static enum Status{
         PENDING,

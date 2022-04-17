@@ -1,4 +1,4 @@
-package s.m.tx.entity.audit;
+package s.m.tx.common;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
