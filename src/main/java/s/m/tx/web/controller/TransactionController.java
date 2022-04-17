@@ -30,7 +30,7 @@ public class TransactionController {
 
     @PatchMapping("/{tx-id}")
     public ResponseEntity<TransactionResponseDTO> updateTransaction(
-            @PathVariable("tx-id") final Long txId, final TransactionRequestDTO requestDTO){
+            @PathVariable("tx-id") final Long txId, @RequestBody final TransactionRequestDTO requestDTO){
         return ResponseEntity.ok(this.transactionService.updateTransaction(txId, requestDTO));
     }
 

@@ -3,6 +3,7 @@ package s.m.tx.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import s.m.tx.common.JsonProcessor;
 import s.m.tx.dto.TransactionRequestDTO;
 import s.m.tx.dto.TransactionResponseDTO;
@@ -56,10 +57,15 @@ public class TransactionService {
     public TransactionResponseDTO updateTransaction(Long txId, TransactionRequestDTO requestDTO) {
         inputValidationService.validateExistingTransaction(txId);
         Transaction tx = this.txRepo.findById(txId).get();
-        tx.setStatus(Transaction.Status.IN_PROGRESS);
-        TransactionData data = new TransactionData();
-        txDataRepo.save(data);
-        data.setTransaction(tx);
+        tx.setStatus(requestDTO.getStatus());
+        TransactionData data;
+        if(ObjectUtils.isEmpty(tx.getData())){
+            data = new TransactionData();
+            txDataRepo.save(data);
+            data.setTransaction(tx);
+        } else {
+            data = tx.getData();
+        }
         String jsonData = jsonProcessor.fromPOJO(requestDTO.getData());
         data.setJsonData(jsonData);
         return TransactionResponseDTO.builder()
